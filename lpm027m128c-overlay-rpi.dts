@@ -1,0 +1,35 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            
+            lpm027m128c: lpm027m128c@0 {
+                compatible = "japan-display,lpm027m128c";
+                reg = <0>;
+                status = "okay";
+                
+                spi-max-frequency = <1000000>; /* 1MHz - velocidad segura */
+                
+                /* Definición de pines GPIO específicos para Raspberry Pi */
+                scs-gpios = <&gpio 8 0>;      /* GPIO8 (CE0) para SCS */
+                extcomin-gpios = <&gpio 7 0>; /* GPIO7 (CE1) para EXTCOMIN */
+                disp-gpios = <&gpio 25 0>;    /* GPIO25 para DISP */
+                extmode-gpios = <&gpio 24 0>; /* GPIO24 para EXTMODE */
+            };
+        };
+    };
+    
+    /* Fragmento para habilitar SPI */
+    fragment@1 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+};
